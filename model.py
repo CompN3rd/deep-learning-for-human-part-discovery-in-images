@@ -28,7 +28,7 @@ class HumanPartsNet(chainer.Chain):
     """
     insize = 300
 
-    def __init__(self, VGGModel=None, n_class=15):
+    def __init__(self, VGGModel=None, n_class=21):
         if VGGModel is None:
             self.wb = load_VGGmodel()
         else:

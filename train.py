@@ -8,7 +8,6 @@ import time
 
 import chainer
 from chainer import cuda
-import chainer.links as L
 from chainer import optimizers
 
 from model import HumanPartsNet
@@ -16,8 +15,8 @@ from debugger import Debugger
 from data import MiniBatchLoader
 
 resultdir = "./result/"
-X_dir = "./data/img/"
-y_dir = "./data/mask/"
+X_dir = "./VOCdevkit/VOC2012/JPEGImages/"
+y_dir = "./VOCdevkit/VOC2012/SegmentationClass/"
 
 
 def train(model, optimizer, MiniBatchLoader, mean_loss, ac, IoU):
@@ -78,7 +77,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # model setteing
-    model = HumanPartsNet(n_class=15)
+    model = HumanPartsNet(n_class=21)
     if args.pretrainedmodel is not None:
         from chainer import serializers
         serializers.load_hdf5(args.pretrainedmodel, model)
@@ -99,7 +98,8 @@ if __name__ == "__main__":
 
     # prepare data feeder
     MiniBatchLoader = MiniBatchLoader(X_dir, y_dir, batchsize=args.batchsize, insize=model.insize, train=True)
-    MiniBatchLoader.scan_for_human()
+    # not for all_classes branch
+    # MiniBatchLoader.scan_for_human()
     debugger = Debugger()
 
     # error checking enabled
